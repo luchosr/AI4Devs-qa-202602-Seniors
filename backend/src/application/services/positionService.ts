@@ -130,8 +130,8 @@ export const createPositionService = async (positionData: any) => {
 
         const positionWithDefaults = {
             ...positionData,
-            companyId: positionData.companyId || company.id,
-            interviewFlowId: positionData.interviewFlowId || interviewFlow.id,
+            companyId: positionData.companyId || company!.id,
+            interviewFlowId: positionData.interviewFlowId || interviewFlow!.id,
         };
 
         const position = new Position(positionWithDefaults);

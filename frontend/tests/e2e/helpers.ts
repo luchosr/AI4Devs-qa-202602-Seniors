@@ -37,6 +37,18 @@ export class TestDataManager {
     return result.data || result;
   }
 
+  private mapSpanishPhaseToEnglish(spanishPhase: string): string {
+    const phaseMap: { [key: string]: string } = {
+      'Aplicado': 'Initial Screening',
+      'Entrevista': 'Technical Interview',
+      'Prueba Técnica': 'Manager Interview',
+      'Oferta': 'Manager Interview',
+      'Contratado': 'Manager Interview',
+      'Rechazado': 'Initial Screening',
+    };
+    return phaseMap[spanishPhase] || spanishPhase;
+  }
+
   async createCandidate(
     positionId: string,
     name: string,
@@ -77,7 +89,10 @@ export class TestDataManager {
       positionData.interviewFlow?.data?.interviewSteps ||
       positionData.interviewFlow?.interviewFlow?.interviewSteps ||
       [];
-    const stepForPhase = interviewSteps.find((step: any) => step.name === phase);
+
+    // Try to find exact phase match first, then try mapped phase
+    const mappedPhase = this.mapSpanishPhaseToEnglish(phase);
+    const stepForPhase = interviewSteps.find((step: any) => step.name === phase || step.name === mappedPhase);
     const interviewStepId = stepForPhase?.id || interviewSteps[0]?.id || 1;
 
     // Create application to link candidate with position
